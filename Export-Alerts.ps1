@@ -79,27 +79,25 @@ try {
             
                 if ($VerboseOutput) { Write-Host "      Found: $($alerts.Count) alerts total." -ForegroundColor Green }
             
-                  foreach ($alert in $alerts) {
-                    $alertInfo = [PSCustomObject]@{
-                        ProjectName     = $project.name
-                        RepositoryName  = $repo.name
-                        RepositoryId    = $repo.id
-                        AlertId         = $alert.alertId
-                      # AlertNumber     = $alert.alertNumber
-                        Title           = $alert.title
-                        Severity        = $alert.severity
-                        State           = $alert.state
-                        Tool            = $alert.tools.name
-                        FirstDetectionDate = $alert.firstSeenDate
-                        LastDetectionDate = $alert.lastSeenDate
-                        IntroductionDate = $alert.introducedDate                   
+                foreach ($alert in $alerts) {
+                   $alertInfo = [PSCustomObject]@{
+                            ProjectName     = $project.name
+                            RepositoryName  = $repo.name
+                            RepositoryId    = $repo.id
+                            AlertId         = $alert.alertId
+                            Title           = $alert.title
+                            Severity        = $alert.severity
+                            State           = $alert.state
+                            Tool            = $alert.tools.name
+                            FirstDetectionDate = $alert.firstSeenDate
+                            LastDetectionDate = $alert.lastSeenDate
+                            IntroductionDate = $alert.introducedDate
+                            GitRef         = $alert.GitRef
+                            Confidence      = $alert.confidence
+                        }
+                        # Add the alert info to the collection
+                        $allAlerts += $alertInfo
                     }
-                
-                    # Add the alert info to the collection
-                    $allAlerts += $alertInfo
-                }
-                
-                # if ($VerboseOutput) { Write-Host "      Found: $($alerts.Count) alerts total." -ForegroundColor Green }
             }
         }
         else {
