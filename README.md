@@ -24,3 +24,7 @@ This PowerShell script exports all Advanced Security alerts for all repositories
 
 ## Output
 - `All-ADO-Alerts.csv`: Contains details of all security alerts, including project, repository, alert ID, title, severity, state, tool, and detection dates.
+
+## References
+
+- [Azure DevOps Advanced Security Alerts API](https://learn.microsoft.com/en-us/rest/api/azure/devops/advancedsecurity/alerts/get?view=azure-devops-rest-7.2)

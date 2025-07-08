@@ -1,7 +1,7 @@
 # Export all Advanced Security alerts for all repositories in an Azure DevOps organization using Azure CLI authentication
 # Use AZ Login to authenticate with Azure CLI before running this script
 
-$organization = "jm-demo"  # Just the org name, not the full URL
+$organization = "MY-ORG"  # Just the org name, not the full URL
 $orgUrl = "https://dev.azure.com/$organization"
 $advSecUrl = "https://advsec.dev.azure.com/$organization"
 $outputCsv = "All-ADO-Alerts.csv"
@@ -85,6 +85,7 @@ try {
                             RepositoryName  = $repo.name
                             RepositoryId    = $repo.id
                             AlertId         = $alert.alertId
+                            AlertType       = $alert.alertType
                             Title           = $alert.title
                             Severity        = $alert.severity
                             State           = $alert.state
