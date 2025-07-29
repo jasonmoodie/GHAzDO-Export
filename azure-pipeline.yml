@@ -1,0 +1,50 @@
+trigger: none
+
+schedules:
+- cron: "0 6 * * 1"  # Run every Monday at 6 AM UTC
+  displayName: Weekly security alerts export
+  branches:
+    include:
+    - main
+
+variables:
+  - group: 'Security-Alerts-Variables'  # Variable group containing: organization, adoPat, azureServiceConnection, outputCsvFile, storageAccountName, containerName
+
+pool:
+  vmImage: 'windows-latest'
+
+jobs:
+- job: ExportSecurityAlerts
+  displayName: 'Export Security Alerts to CSV'
+  
+  steps:
+  - checkout: self
+    displayName: 'Checkout repository'
+
+  - task: AzureCLI@2
+    displayName: 'Export Security Alerts'
+    inputs:
+      azureSubscription: 'adoGHAzDOServicesConnection'
+      scriptType: 'ps'
+      scriptLocation: 'scriptPath'
+      scriptPath: '$(Build.SourcesDirectory)\Export-Alerts.ps1'
+      workingDirectory: '$(Build.SourcesDirectory)'
+    env:
+      ADO_ORGANIZATION: $(organization)
+      OUTPUT_CSV_FILE: $(outputCsvFile)
+      ADO_PAT: $(adoPat)
+
+  - task: AzureCLI@2
+    displayName: 'Upload CSV to Azure Storage'
+    inputs:
+      azureSubscription: 'adoGHAzDOServicesConnection'
+      scriptType: 'ps'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        $storageAccount = "$(storageAccountName)"
+        $containerName = "$(containerName)"
+        $csvFile = "$(Build.SourcesDirectory)\$(outputCsvFile)"
+        $blobName = "$(outputCsvFile)"
+        
+        # Upload the file to blob storage
+        az storage blob upload --account-name $storageAccount --container-name $containerName --name $blobName --file $csvFile --auth-mode login --overwrite

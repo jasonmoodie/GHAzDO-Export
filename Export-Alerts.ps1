@@ -1,22 +1,24 @@
 # Export all Advanced Security alerts for all repositories in an Azure DevOps organization using Azure CLI authentication
 # Use AZ Login to authenticate with Azure CLI before running this script
 
-$organization = "MY-ORG"  # Just the org name, not the full URL
+# Get parameters from environment variables or use defaults
+$organization = $env:ADO_ORGANIZATION  # Set this in your variable group
 $orgUrl = "https://dev.azure.com/$organization"
 $advSecUrl = "https://advsec.dev.azure.com/$organization"
-$outputCsv = "All-ADO-Alerts.csv"
+$outputCsv = $env:OUTPUT_CSV_FILE
 
 # Toggle verbose output (set to $false to suppress Write-Host messages)
 $VerboseOutput = $true
 
-try {
-    # Get Azure CLI token for Azure DevOps
-    $tokenResponse = az account get-access-token --resource "499b84ac-1321-427f-aa17-267ca6975798" | ConvertFrom-Json
-    $token = $tokenResponse.accessToken
+$pat = $env:ADO_PAT
 
-    # Set Authorization header
+# Encode PAT for Basic Auth (username is empty string)
+$base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$pat"))
+
+try {
+    # Set Authorization header for PAT
     $headers = @{
-        'Authorization' = "Bearer $token"
+        'Authorization' = "Basic $base64AuthInfo"
         'Content-Type'  = 'application/json'
     }
 
@@ -112,8 +114,10 @@ try {
     if ($VerboseOutput) {
         Write-Host "`nExport completed successfully!" -ForegroundColor Green
         Write-Host "Output file: $outputCsv" -ForegroundColor Yellow
+        Write-Host "Total alerts exported: $($allAlerts.Count)" -ForegroundColor Green
     }
 }
 catch {
     Write-Host "Error: $($_.Exception.Message)" -ForegroundColor Red
+    throw
 }
