@@ -19,6 +19,10 @@ This repository contains a comprehensive solution for exporting, storing, and vi
 - Collects all Advanced Security alerts for each repository
 - Handles paginated results using continuation tokens
 - Exports the collected alert data to a CSV file
+- Automated pipeline execution with Azure DevOps YAML pipeline
+- Upload results to Azure Storage for centralized data management
+- Pre-built Power BI dashboard for visualizing security alert trends and metrics
+- Comprehensive reporting across multiple projects and repositories
 
 ## 🚀 Usage
 
