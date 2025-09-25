@@ -108,3 +108,11 @@ You can now use the dashboard to analyze and visualize your Azure DevOps Advance
 
 - [Azure DevOps Advanced Security Alerts API](https://learn.microsoft.com/en-us/rest/api/azure/devops/advancedsecurity/alerts/get?view=azure-devops-rest-7.2)
 - [Azure DevOps Personal Access Tokens](https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate)
+
+## Maintainers
+
+@jasonmoodie, @CalinL
+
+## Support
+
+These are just files for you to download and use as you see fit. If you have questions about how to use them, please reach out to the maintainers, but we cannot guarantee a response with SLAs.
